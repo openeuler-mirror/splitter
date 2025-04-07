@@ -3,20 +3,22 @@
 ## 介绍
 splitter用于生成openEuler distroless镜像制作的原材料-slices，通过[EulerPublisher](https://gitee.com/openeuler/eulerpublisher)生成最终distroless镜像并发布。
 
-一般情况下，制作一个应用容器镜像会直接使用`RUN yum install`在镜像中打包所需的应用及其依赖软件包。这种以RPM为最小粒度的镜像打包方式会导致镜像内包含冗余文件，暴露更多攻击点，并且额外增加镜像体积影响传播。而Distroless镜像是一种精简的容器镜像，旨在最小化容器的大小和攻击面。与一般的容器镜像不同，distroless镜像不包含操作系统的许多组件，只包含运行应用程序所需的最小依赖项。
+一般情况下，制作一个应用容器镜像会直接使用`RUN yum install`在镜像中打包所需的应用及其依赖软件包。这种以RPM为最小粒度的镜像打包方式会导致镜像内包含冗余文件，暴露更多攻击点，并且额外增加镜像体积影响传播。
+
+Distroless镜像是一种精简的容器镜像，旨在最小化容器的大小和攻击面。与一般的容器镜像不同，distroless镜像不包含操作系统的许多组件，只包含运行应用程序所需的最小依赖项。
 
 openEuler distroless镜像构建时，首先使用splitter对RPM软件包进行切分处理，每个软件包会被切分成多个slices（每个slice包含一组具有特定功能的文件集合），软件包之间的依赖关系也更精细地表现为slice之间的依赖；然后以slice为最小构建单元生成最终的distroless镜像，可以有效减少冗余文件，进而降低安全风险。
 
-![img.png](docs/pictures/img.png)
+![img.png](docs/pictures/package.png)
 
-如上图所示的软件包依赖关系中，软件包A和B被切分为多个是slice。在软件包的依赖中，软件包B依赖于软件包A等价于B_slice1和B_slice2依赖于A_slice1、A_slice2。这样，在容器镜像内就可以不在打包A_slice3所包含的文件。
+如上图所示，软件包B依赖于软件包A等价于B_slice1和B_slice2依赖于A_slice1、A_slice2，在生成B的应用镜像时，可以不再打包A_slice3所包含的文件。
 
 ## 软件架构
 软件架构说明
 
 
 ## 安装指南
-splitter处于开发阶段，当前仅支持在openEuler上部署。
+splitter处于开发阶段，当前仅支持在openEuler上部署（建议使用[install.sh](./install.sh)一键安装）：
 
 1. 安装系统依赖
 ```
