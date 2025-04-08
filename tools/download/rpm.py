@@ -87,23 +87,22 @@ def download(dnf_client: dnf.Base, package: str) -> str:
         logger.debug(f"Downloading package: {latest_package}...")
         # download
         dnf_client.download_packages([latest_package])
-
-        # output the local paths of downloaded packages
-        logger.info("Downloaded package successfully, package info:")
-        logger.info(
-            "Package: {}, Version: {}, Release: {}, path: {}".format(
-                latest_package.name,
-                latest_package.version,
-                latest_package.release,
-                latest_package.localPkg()
-            )
-        )
-        if not latest_package.localPkg():
-            raise RuntimeError(f"Failed to download download '{package}'!")
-        return latest_package.localPkg()
     except Exception as e:
         logger.error(f"Unexpected error while downloading {package}: {e}")
         raise e
+
+    if not latest_package.localPkg():
+        raise RuntimeError(f"Failed to download download '{package}'!")
+    logger.info("Downloaded package successfully, package info:")
+    logger.info(
+        "Package: {}, Version: {}, Release: {}, path: {}".format(
+            latest_package.name,
+            latest_package.version,
+            latest_package.release,
+            latest_package.localPkg()
+        )
+    )
+    return latest_package.localPkg()
 
 
 def clear(base: dnf.Base) -> None:
