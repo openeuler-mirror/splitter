@@ -13,8 +13,10 @@ from tools import SLICE_PATH, SLICE_REPO, SLICE_DIR
 ARCHES = {
     "x86_64": "x86_64",
     "amd64": "x86_64",
+    "linux/amd64": "x86_64",
     "aarch64": "aarch64",
-    "arm64": "aarch64"
+    "arm64": "aarch64",
+    "linux/arm64": "aarch64"
 }
 
 
