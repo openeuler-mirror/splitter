@@ -1,9 +1,11 @@
 import subprocess
+import os
 
 from typing import List
 
 from tools.parse import parse
 from tools.download import rpm
+from tools.cert.cert import RPMCertPacker
 from tools.splitter.loader import SplitterLoader
 from tools.logger import logger
 
@@ -84,7 +86,7 @@ class Splitter:
                  slices: List[str]
         ):
         self.release = f"openEuler-{release.upper()}"
-        self.output = output
+        self.output = os.path.abspath(output)
         self.slices = slices
         # checks
         _slices_check(self.slices)
@@ -96,6 +98,8 @@ class Splitter:
             sdf_dir=SLICE_DIR,
             release=self.release
         )
+        self.cert = RPMCertPacker(db_root=self.output)
+
 
     def cut(self):
         """
@@ -138,6 +142,7 @@ class Splitter:
                     .text_handler(self.output)
                     .manifest_handler(self.output)
                 )
-
+            # support vuln scanning and SBOM
+            self.cert.pack_cert(rpm_file=local_pkg)
         # clear cache and close dnf.Base
         rpm.clear(dnf_client)
