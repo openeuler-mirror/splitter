@@ -23,10 +23,6 @@ def run_command(cmd: list, check: bool = True) -> bool:
 
 
 def init_rpm_db(db_path: str) -> bool:
-    if not os.path.exists("/var/lib/rpm"):
-        logger.info("Creating /var/lib/rpm directory...")
-        os.makedirs("/var/lib/rpm", mode=0o755, exist_ok=True)
-    
     logger.info("Initializing RPM database...")
     return run_command(["rpmdb", "--initdb", "--dbpath", db_path])
 
