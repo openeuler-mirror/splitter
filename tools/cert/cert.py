@@ -36,6 +36,7 @@ def add_package_to_db(db_path: str, rpm_file: str) -> bool:
     command = [
         "rpm",
         "-ivh",
+        "--ignorearch",
         "--force",
         "--nodeps",
         "--justdb",
@@ -49,7 +50,7 @@ def add_package_to_db(db_path: str, rpm_file: str) -> bool:
 def verify_package(db_path: str, pkg_name: str) -> Optional[str]:
     try:
         result = subprocess.run(
-            ["rpm", "--dbpath", db_path, "--ignorearch", "-q", pkg_name],
+            ["rpm", "--dbpath", db_path, "-q", pkg_name],
             check=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
