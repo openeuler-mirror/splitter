@@ -36,6 +36,7 @@ def add_package_to_db(db_path: str, rpm_file: str) -> bool:
     command = [
         "rpm",
         "-ivh",
+        "--ignorearch",
         "--force",
         "--nodeps",
         "--justdb",
