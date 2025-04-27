@@ -13,7 +13,7 @@ def _parse_slice(slice: str) -> Tuple[str, str]:
     """
     if "_" not in slice:
         raise ValueError(f"Invalid sdf name format: {slice}")
-    info = slice.split("_")
+    info = slice.rsplit("_", 1)
     # Get the required {package}.yaml to generate the required slice
     pkgfile = f"{SLICE_DIR}/{info[0]}.yaml"
     slicename = info[1]
